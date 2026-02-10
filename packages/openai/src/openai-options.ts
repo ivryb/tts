@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { TTSInvalidArgumentError } from '@tts-sdk/provider';
+import { openAIKnownVoices } from './openai-voice-catalog.generated';
 
 export const openAITTSProviderOptionsSchema = z.object({
   extraBody: z.record(z.string(), z.unknown()).optional(),
@@ -17,15 +18,7 @@ export const openAIKnownSpeechModelIds = [
   'tts-1',
   'tts-1-hd',
 ] as const;
-
-export const openAIKnownVoices = [
-  'alloy',
-  'echo',
-  'fable',
-  'onyx',
-  'nova',
-  'shimmer',
-] as const;
+export { openAIKnownVoices };
 
 export type OpenAIKnownSpeechModelId = (typeof openAIKnownSpeechModelIds)[number];
 export type OpenAIKnownVoice = (typeof openAIKnownVoices)[number];
@@ -48,7 +41,7 @@ export type OpenAISpeechModelId =
 export type OpenAIVoice = OpenAIKnownVoice | OpenAICustomVoice;
 
 const openAIKnownSpeechModelIdSet = new Set<string>(openAIKnownSpeechModelIds);
-const openAIKnownVoiceSet = new Set<string>(openAIKnownVoices);
+const openAIKnownVoiceSchema = z.enum(openAIKnownVoices);
 
 function requireNonEmpty(value: string, label: string): string {
   const normalized = value.trim();
@@ -95,8 +88,9 @@ export function resolveOpenAIVoice(voice: string | undefined): string {
     return 'alloy';
   }
 
-  if (openAIKnownVoiceSet.has(voice)) {
-    return voice;
+  const knownVoice = openAIKnownVoiceSchema.safeParse(voice);
+  if (knownVoice.success) {
+    return knownVoice.data;
   }
 
   const customVoice = decodeCustomValue(voice, OPENAI_CUSTOM_VOICE_PREFIX);

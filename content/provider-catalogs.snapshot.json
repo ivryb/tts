@@ -1,7 +1,7 @@
 {
   "providers": {
     "openai": {
-      "source": "https://platform.openai.com/docs/guides/text-to-speech",
+      "source": "https://developers.openai.com/api/reference/resources/audio/subresources/speech/methods/create",
       "models": [
         "gpt-4o-mini-tts",
         "tts-1",
@@ -9,11 +9,18 @@
       ],
       "voices": [
         "alloy",
+        "ash",
+        "ballad",
+        "coral",
         "echo",
         "fable",
         "onyx",
         "nova",
-        "shimmer"
+        "sage",
+        "shimmer",
+        "verse",
+        "marin",
+        "cedar"
       ]
     },
     "azure-openai": {

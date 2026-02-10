@@ -250,7 +250,7 @@ Known model ids:
 
 Known voices:
 
-- `alloy`, `echo`, `fable`, `onyx`, `nova`, `shimmer`
+- `alloy`, `ash`, `ballad`, `coral`, `echo`, `fable`, `onyx`, `nova`, `sage`, `shimmer`, `verse`, `marin`, `cedar`
 
 ### OpenAI examples
 
@@ -860,7 +860,7 @@ Generate `llms.txt` from docs content:
 pnpm docs:llms
 ```
 
-Sync provider model/voice catalog snapshot:
+Sync provider model/voice catalog artifacts (snapshot + generated OpenAI voice catalog):
 
 ```bash
 pnpm providers:sync-catalogs

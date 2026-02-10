@@ -143,6 +143,26 @@ describe('openai provider', () => {
     expect(fetchMock).toHaveBeenCalledTimes(0);
   });
 
+  it('accepts newly added built-in voice', async () => {
+    const fetchMock = vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) => {
+      const body = JSON.parse(String(init?.body));
+      expect(body.voice).toBe('ash');
+
+      return new Response(Uint8Array.from([1, 2, 3]), {
+        status: 200,
+        headers: { 'content-type': 'audio/mpeg' },
+      });
+    });
+
+    const provider = createOpenAI({ apiKey: 'test-key', fetch: fetchMock });
+    await provider.speech('tts-1').doSynthesize({
+      text: 'hello',
+      voice: 'ash',
+    });
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
   it('allows explicit custom voice helper', async () => {
     const fetchMock = vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) => {
       const body = JSON.parse(String(init?.body));
