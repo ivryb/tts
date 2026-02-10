@@ -1,0 +1,32 @@
+{
+  "name": "@tts-sdk/openai",
+  "version": "0.1.0-beta",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist/**/*",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest --run --exclude \"src/**/*.real.test.ts\" --exclude \"dist/**\"",
+    "test:real": "vitest --run --config vitest.real.config.ts"
+  },
+  "dependencies": {
+    "@tts-sdk/provider": "workspace:*",
+    "@tts-sdk/provider-utils": "workspace:*",
+    "zod": "^4.3.6"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

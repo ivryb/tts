@@ -1,0 +1,15 @@
+{
+  "name": "@tts-sdk/tools-generate-llms-txt",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "generate": "node ./generate-llms-txt.mjs",
+    "test": "echo 'No tests for generate-llms-txt'"
+  },
+  "devDependencies": {
+    "@types/node": "^25.2.2"
+  }
+}

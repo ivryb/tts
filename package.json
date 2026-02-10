@@ -1,0 +1,27 @@
+{
+  "name": "tts-repo",
+  "private": true,
+  "packageManager": "pnpm@10.11.0",
+  "scripts": {
+    "build": "turbo build",
+    "typecheck": "turbo typecheck",
+    "test": "turbo test",
+    "test:real": "turbo test:real",
+    "changeset": "changeset",
+    "changeset:status": "changeset status --verbose",
+    "changeset:version": "changeset version && pnpm install --no-frozen-lockfile",
+    "docs:llms": "pnpm --filter @tts-sdk/tools-generate-llms-txt generate",
+    "providers:sync-catalogs": "node tools/sync-provider-catalogs.mjs --write",
+    "providers:check-catalogs": "node tools/sync-provider-catalogs.mjs --check",
+    "release:publish": "node tools/release-publish.mjs",
+    "release:publish:beta": "node tools/release-publish.mjs --tag beta",
+    "release:publish:dry-run": "node tools/release-publish.mjs --dry-run"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.8",
+    "@types/node": "^25.2.2",
+    "turbo": "^2.8.3",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.18"
+  }
+}

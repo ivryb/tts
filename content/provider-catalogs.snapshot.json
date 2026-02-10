@@ -1,0 +1,128 @@
+{
+  "providers": {
+    "openai": {
+      "source": "https://platform.openai.com/docs/guides/text-to-speech",
+      "models": [
+        "gpt-4o-mini-tts",
+        "tts-1",
+        "tts-1-hd"
+      ],
+      "voices": [
+        "alloy",
+        "echo",
+        "fable",
+        "onyx",
+        "nova",
+        "shimmer"
+      ]
+    },
+    "azure-openai": {
+      "source": "https://learn.microsoft.com/en-us/azure/ai-services/openai/text-to-speech-quickstart",
+      "models": [
+        "gpt-4o-mini-tts",
+        "tts-1",
+        "tts-1-hd"
+      ],
+      "voices": [
+        "alloy",
+        "echo",
+        "fable",
+        "nova",
+        "onyx",
+        "shimmer"
+      ]
+    },
+    "elevenlabs": {
+      "source": "https://api.elevenlabs.io/openapi.json",
+      "models": [
+        "eleven_flash_v2_5",
+        "eleven_multilingual_v2",
+        "eleven_turbo_v2_5"
+      ]
+    },
+    "qwen": {
+      "source": "https://www.alibabacloud.com/help/en/model-studio/qwen-tts",
+      "models": [
+        "qwen3-tts-flash",
+        "qwen-tts",
+        "qwen-tts-latest"
+      ],
+      "voices": [
+        "Aiden",
+        "Alek",
+        "Andre",
+        "Arthur",
+        "Bella",
+        "Bellona",
+        "Bodega",
+        "Bunny",
+        "Chelsie",
+        "Cherry",
+        "Dolce",
+        "Dylan",
+        "Ebona",
+        "Eldric Sage",
+        "Elias",
+        "Emilien",
+        "Eric",
+        "Ethan",
+        "Jada",
+        "Jennifer",
+        "Kai",
+        "Katerina",
+        "Kiki",
+        "Lenn",
+        "Li",
+        "Maia",
+        "Marcus",
+        "Mia",
+        "Mochi",
+        "Momo",
+        "Moon",
+        "Neil",
+        "Nini",
+        "Nofish",
+        "Ono Anna",
+        "Peter",
+        "Pip",
+        "Radio Gol",
+        "Rocky",
+        "Roy",
+        "Ryan",
+        "Seren",
+        "Serena",
+        "Sohee",
+        "Sonrisa",
+        "Stella",
+        "Sunny",
+        "Vincent",
+        "Vivian"
+      ]
+    },
+    "replicate": {
+      "source": "https://replicate.com/minimax/speech-02-turbo/api/api-reference",
+      "models": [
+        "minimax/speech-02-turbo"
+      ],
+      "minimaxVoices": [
+        "Abbess",
+        "Calm_Woman",
+        "Casual_Guy",
+        "Decent_Boy",
+        "Deep_Voice_Man",
+        "Determined_Man",
+        "Elegant_Man",
+        "Exuberant_Girl",
+        "Friendly_Person",
+        "Imposing_Manner",
+        "Inspirational_girl",
+        "Lively_Girl",
+        "Lovely_Girl",
+        "Patient_Man",
+        "Sweet_Girl_2",
+        "Wise_Woman",
+        "Young_Knight"
+      ]
+    }
+  }
+}

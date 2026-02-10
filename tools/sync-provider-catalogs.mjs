@@ -1,0 +1,201 @@
+#!/usr/bin/env node
+
+import { readFile, writeFile } from 'node:fs/promises';
+import process from 'node:process';
+
+const SNAPSHOT_PATH = new URL('../content/provider-catalogs.snapshot.json', import.meta.url);
+
+const OPENAI_MODELS = ['gpt-4o-mini-tts', 'tts-1', 'tts-1-hd'];
+const OPENAI_VOICES = ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer'];
+
+const ELEVENLABS_MODELS_ALLOWLIST = [
+  'eleven_flash_v2_5',
+  'eleven_multilingual_v2',
+  'eleven_turbo_v2_5',
+];
+
+async function fetchText(url) {
+  const response = await fetch(url, {
+    headers: {
+      'User-Agent': 'tts-sdk/catalog-sync',
+      Accept: 'text/html,application/json;q=0.9,*/*;q=0.8',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
+  }
+
+  return response.text();
+}
+
+function uniqueSorted(values) {
+  return [...new Set(values)].sort((a, b) => a.localeCompare(b));
+}
+
+function extractAzureVoices(html) {
+  const match = html.match(
+    /available voices are:\s*<code>([^<]+)<\/code>,\s*<code>([^<]+)<\/code>,\s*<code>([^<]+)<\/code>,\s*<code>([^<]+)<\/code>,\s*<code>([^<]+)<\/code>,\s*and\s*<code>([^<]+)<\/code>/i,
+  );
+
+  if (!match) {
+    return OPENAI_VOICES;
+  }
+
+  return uniqueSorted(match.slice(1).map(value => value.trim()));
+}
+
+function extractQwenVoices(html) {
+  const codeValues = Array.from(
+    html.matchAll(/<code[^>]*>([^<]+)<\/code>/g),
+    match => match[1].trim(),
+  );
+
+  const excluded = new Set([
+    '# ======= Important =======',
+    '# DashScope SDK version 1.24.6 or later',
+    '&lt;!-- https://mvnrepository.com/artifact/com.google.code.gson/gson --&gt;',
+    '// DashScope SDK version 2.21.9 or later',
+    '// Install the latest version of the DashScope SDK',
+    '// https://mvnrepository.com/artifact/com.google.code.gson/gson',
+    'Auto',
+    'Chinese',
+    'English',
+    'French',
+    'German',
+    'Italian',
+    'Japanese',
+    'Korean',
+    'Portuguese',
+    'Russian',
+    'Spanish',
+    'MultiModalConversation',
+    'SpeechSynthesizer',
+    'build.gradle',
+    'language_type',
+    'pom.xml',
+    'text',
+    'url',
+    'voice',
+  ]);
+
+  return uniqueSorted(
+    codeValues.filter(value => {
+      if (excluded.has(value)) {
+        return false;
+      }
+
+      if (value.length < 2 || value.length > 40) {
+        return false;
+      }
+
+      return /^[A-Za-z][A-Za-z ]+$/.test(value);
+    }),
+  );
+}
+
+function extractReplicateMiniMaxVoices(html) {
+  const match = html.match(/System voice IDs include:\s*([^"]+)/i);
+  if (!match) {
+    return [];
+  }
+
+  return uniqueSorted(
+    match[1]
+      .split(',')
+      .map(value => value.trim())
+      .filter(Boolean),
+  );
+}
+
+function extractElevenLabsModels(openapiJsonText) {
+  const found = Array.from(
+    new Set(
+      Array.from(openapiJsonText.matchAll(/\beleven_[a-z0-9_]+_v[0-9_]+\b/g), match =>
+        match[0],
+      ),
+    ),
+  );
+
+  const filtered = found.filter(model => ELEVENLABS_MODELS_ALLOWLIST.includes(model));
+  return uniqueSorted(filtered);
+}
+
+async function buildSnapshot() {
+  const [azureHtml, qwenHtml, replicateHtml, elevenlabsOpenapi] = await Promise.all([
+    fetchText('https://learn.microsoft.com/en-us/azure/ai-services/openai/text-to-speech-quickstart'),
+    fetchText('https://www.alibabacloud.com/help/en/model-studio/qwen-tts'),
+    fetchText('https://replicate.com/minimax/speech-02-turbo/api/api-reference'),
+    fetchText('https://api.elevenlabs.io/openapi.json'),
+  ]);
+
+  const azureVoices = extractAzureVoices(azureHtml);
+  const qwenVoices = extractQwenVoices(qwenHtml);
+  const replicateMiniMaxVoices = extractReplicateMiniMaxVoices(replicateHtml);
+  const elevenLabsModels = extractElevenLabsModels(elevenlabsOpenapi);
+
+  return {
+    providers: {
+      openai: {
+        source: 'https://platform.openai.com/docs/guides/text-to-speech',
+        models: OPENAI_MODELS,
+        voices: OPENAI_VOICES,
+      },
+      'azure-openai': {
+        source:
+          'https://learn.microsoft.com/en-us/azure/ai-services/openai/text-to-speech-quickstart',
+        models: OPENAI_MODELS,
+        voices: azureVoices,
+      },
+      elevenlabs: {
+        source: 'https://api.elevenlabs.io/openapi.json',
+        models: elevenLabsModels,
+      },
+      qwen: {
+        source: 'https://www.alibabacloud.com/help/en/model-studio/qwen-tts',
+        models: ['qwen3-tts-flash', 'qwen-tts', 'qwen-tts-latest'],
+        voices: qwenVoices,
+      },
+      replicate: {
+        source: 'https://replicate.com/minimax/speech-02-turbo/api/api-reference',
+        models: ['minimax/speech-02-turbo'],
+        minimaxVoices: replicateMiniMaxVoices,
+      },
+    },
+  };
+}
+
+async function run() {
+  const mode = process.argv.includes('--check')
+    ? 'check'
+    : process.argv.includes('--write')
+      ? 'write'
+      : 'print';
+
+  const snapshot = await buildSnapshot();
+  const content = `${JSON.stringify(snapshot, null, 2)}\n`;
+
+  if (mode === 'print') {
+    process.stdout.write(content);
+    return;
+  }
+
+  if (mode === 'write') {
+    await writeFile(SNAPSHOT_PATH, content, 'utf8');
+    process.stdout.write(`Updated ${SNAPSHOT_PATH.pathname}\n`);
+    return;
+  }
+
+  const current = await readFile(SNAPSHOT_PATH, 'utf8').catch(() => '');
+  if (current !== content) {
+    process.stderr.write(
+      `Catalog snapshot is out of date. Run: node tools/sync-provider-catalogs.mjs --write\n`,
+    );
+    process.exitCode = 1;
+    return;
+  }
+
+  process.stdout.write('Catalog snapshot is up to date.\n');
+}
+
+await run();
