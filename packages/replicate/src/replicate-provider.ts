@@ -46,7 +46,7 @@ export function createReplicate(
         })}`,
         ...options.headers,
       },
-      'tts-sdk/replicate/0.1.0-beta',
+      'tts-sdk/replicate/0.1.0',
     );
 
   const createSpeechModel = (modelId: ReplicateSpeechModelId) =>

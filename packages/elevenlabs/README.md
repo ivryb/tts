@@ -1,6 +1,6 @@
 # @tts-sdk/elevenlabs
 
-ElevenLabs provider for `tts-sdk`.
+ElevenLabs provider for `@tts-sdk/tts`.
 
 Canonical documentation lives in the root README:
 

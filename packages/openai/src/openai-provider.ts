@@ -50,7 +50,7 @@ export function createOpenAI(options: OpenAIProviderSettings = {}): OpenAIProvid
         'OpenAI-Project': options.project,
         ...options.headers,
       },
-      'tts-sdk/openai/0.1.0-beta',
+      'tts-sdk/openai/0.1.0',
     );
 
   const fetchFn = options.fetch ?? fetch;

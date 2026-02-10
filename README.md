@@ -1,4 +1,4 @@
-# tts-sdk
+# @tts-sdk/tts
 
 Type-safe TypeScript SDK for text-to-speech across multiple providers.
 
@@ -24,7 +24,7 @@ This README is the canonical documentation for the whole library.
 
 ## Packages
 
-- `tts-sdk`: core API (`synthesize`, `streamSynthesize`, `synthesizeWithTimestamps`, safe wrappers, registry helpers)
+- `@tts-sdk/tts`: core API (`synthesize`, `streamSynthesize`, `synthesizeWithTimestamps`, safe wrappers, registry helpers)
 - `@tts-sdk/provider`: provider interfaces and typed errors
 - `@tts-sdk/provider-utils`: shared helpers for provider implementations
 - `@tts-sdk/openai`
@@ -36,7 +36,7 @@ This README is the canonical documentation for the whole library.
 ## Install
 
 ```bash
-npm i tts-sdk @tts-sdk/openai
+npm i @tts-sdk/tts @tts-sdk/openai
 ```
 
 Install only the provider packages you use.
@@ -44,7 +44,7 @@ Install only the provider packages you use.
 ## Quick start
 
 ```ts
-import { synthesize } from 'tts-sdk';
+import { synthesize } from '@tts-sdk/tts';
 import { createOpenAI } from '@tts-sdk/openai';
 
 const openai = createOpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -67,7 +67,7 @@ All core methods accept `SynthesizeOptions` and work with any provider model.
 Generate full audio in one response.
 
 ```ts
-import { synthesize } from 'tts-sdk';
+import { synthesize } from '@tts-sdk/tts';
 
 const res = await synthesize({
   model: openai.speech('tts-1'),
@@ -80,7 +80,7 @@ const res = await synthesize({
 Generate audio as an async stream of chunks.
 
 ```ts
-import { streamSynthesize } from 'tts-sdk';
+import { streamSynthesize } from '@tts-sdk/tts';
 
 const res = await streamSynthesize({
   model: openai.speech('tts-1'),
@@ -98,7 +98,7 @@ for await (const part of res.audioStream) {
 Generate audio with alignment data on providers/models that support timestamps.
 
 ```ts
-import { synthesizeWithTimestamps } from 'tts-sdk';
+import { synthesizeWithTimestamps } from '@tts-sdk/tts';
 import { createElevenLabs, elevenLabsCustomVoiceId } from '@tts-sdk/elevenlabs';
 
 const elevenlabs = createElevenLabs({ apiKey: process.env.ELEVENLABS_API_KEY });
@@ -124,7 +124,7 @@ import {
   safeSynthesize,
   safeStreamSynthesize,
   safeSynthesizeWithTimestamps,
-} from 'tts-sdk';
+} from '@tts-sdk/tts';
 
 const a = await safeSynthesize({ model: openai.speech('tts-1'), text: 'hello' });
 if (a.isErr()) {
@@ -255,7 +255,7 @@ Known voices:
 ### OpenAI examples
 
 ```ts
-import { synthesize, streamSynthesize } from 'tts-sdk';
+import { synthesize, streamSynthesize } from '@tts-sdk/tts';
 import {
   createOpenAI,
   openAICustomSpeechModelId,
@@ -348,7 +348,7 @@ import {
   synthesize,
   streamSynthesize,
   synthesizeWithTimestamps,
-} from 'tts-sdk';
+} from '@tts-sdk/tts';
 import {
   createElevenLabs,
   elevenLabsCustomSpeechModelId,
@@ -456,7 +456,7 @@ Known voices:
 ### Azure OpenAI examples
 
 ```ts
-import { synthesize, streamSynthesize } from 'tts-sdk';
+import { synthesize, streamSynthesize } from '@tts-sdk/tts';
 import { createAzureOpenAI, azureOpenAICustomVoice } from '@tts-sdk/azure-openai';
 
 const provider = createAzureOpenAI({
@@ -536,7 +536,7 @@ Known voices include:
 ### Qwen examples
 
 ```ts
-import { synthesize, streamSynthesize } from 'tts-sdk';
+import { synthesize, streamSynthesize } from '@tts-sdk/tts';
 import {
   createQwen,
   qwenCustomSpeechModelId,
@@ -633,7 +633,7 @@ import {
   synthesize,
   streamSynthesize,
   synthesizeWithTimestamps,
-} from 'tts-sdk';
+} from '@tts-sdk/tts';
 import {
   createReplicate,
   replicateCustomSpeechModelId,
@@ -697,7 +697,7 @@ await synthesize({
 Create a single provider that resolves models like `"providerId:modelId"`.
 
 ```ts
-import { createProviderRegistry, synthesize } from 'tts-sdk';
+import { createProviderRegistry, synthesize } from '@tts-sdk/tts';
 import { createOpenAI } from '@tts-sdk/openai';
 import { createElevenLabs } from '@tts-sdk/elevenlabs';
 
@@ -720,7 +720,7 @@ await synthesize({ model, text: 'Registry-based model resolution' });
 Create an ad-hoc provider from a map of model ids to model instances.
 
 ```ts
-import { customProvider, synthesize } from 'tts-sdk';
+import { customProvider, synthesize } from '@tts-sdk/tts';
 
 const p = customProvider({
   speechModels: {
@@ -736,7 +736,7 @@ await synthesize({
 
 ## Error handling
 
-Typed errors are exported from `tts-sdk` (re-exported from `@tts-sdk/provider`):
+Typed errors are exported from `@tts-sdk/tts` (re-exported from `@tts-sdk/provider`):
 
 - `TTSSDKError`
 - `TTSLoadApiKeyError`
@@ -750,7 +750,7 @@ Typed errors are exported from `tts-sdk` (re-exported from `@tts-sdk/provider`):
 Example:
 
 ```ts
-import { synthesize, TTSUnsupportedFunctionalityError } from 'tts-sdk';
+import { synthesize, TTSUnsupportedFunctionalityError } from '@tts-sdk/tts';
 
 try {
   await synthesize({
@@ -818,7 +818,7 @@ pnpm release:publish:dry-run
 Notes:
 
 - `release:publish` skips package versions that already exist on npm.
-- Prerelease versions (for example `0.1.0-beta`) publish with their prerelease tag by default (for example `beta`).
+- Prerelease versions (for example `0.2.0-beta.1`) publish with their prerelease tag by default (for example `beta`).
 
 ## Environment variable reference
 

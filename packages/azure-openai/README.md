@@ -1,6 +1,6 @@
 # @tts-sdk/azure-openai
 
-Azure OpenAI provider for `tts-sdk`.
+Azure OpenAI provider for `@tts-sdk/tts`.
 
 Canonical documentation lives in the root README:
 

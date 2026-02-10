@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for contributing to `tts-sdk`.
+Thanks for contributing to `@tts-sdk/tts`.
 
 ## Project setup
 
@@ -123,7 +123,7 @@ pnpm release:publish:beta
 Notes:
 - `release:publish` publishes in internal dependency order.
 - Already published versions are skipped.
-- Pre-release versions (for example `0.1.0-beta`) are automatically published with prerelease tag unless overridden.
+- Pre-release versions (for example `0.2.0-beta.1`) are automatically published with prerelease tag unless overridden.
 
 ### Required repository secret
 

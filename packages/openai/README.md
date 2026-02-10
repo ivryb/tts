@@ -1,6 +1,6 @@
 # @tts-sdk/openai
 
-OpenAI provider for `tts-sdk`.
+OpenAI provider for `@tts-sdk/tts`.
 
 Canonical documentation lives in the root README:
 

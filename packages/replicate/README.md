@@ -1,6 +1,6 @@
 # @tts-sdk/replicate
 
-Replicate provider for `tts-sdk`.
+Replicate provider for `@tts-sdk/tts`.
 
 Canonical documentation lives in the root README:
 

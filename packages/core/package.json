@@ -1,6 +1,6 @@
 {
-  "name": "tts-sdk",
-  "version": "0.1.0-beta",
+  "name": "@tts-sdk/tts",
+  "version": "0.1.0",
   "license": "MIT",
   "type": "module",
   "main": "./dist/index.js",

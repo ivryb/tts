@@ -1,6 +1,6 @@
 # @tts-sdk/qwen
 
-Qwen provider for `tts-sdk`.
+Qwen provider for `@tts-sdk/tts`.
 
 Canonical documentation lives in the root README:
 

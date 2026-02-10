@@ -56,7 +56,7 @@ export function createQwen(options: QwenProviderSettings = {}): QwenProvider {
         })}`,
         ...options.headers,
       },
-      'tts-sdk/qwen/0.1.0-beta',
+      'tts-sdk/qwen/0.1.0',
     );
 
   const createSpeechModel = (modelId: QwenSpeechModelId) =>

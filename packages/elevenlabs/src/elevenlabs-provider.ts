@@ -48,7 +48,7 @@ export function createElevenLabs(
         }),
         ...options.headers,
       },
-      'tts-sdk/elevenlabs/0.1.0-beta',
+      'tts-sdk/elevenlabs/0.1.0',
     );
 
   const createSpeechModel = (modelId: ElevenLabsSpeechModelId) =>

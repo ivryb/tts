@@ -129,7 +129,7 @@ export function createAzureOpenAI(
         ...auth,
         ...options.headers,
       },
-      'tts-sdk/azure-openai/0.1.0-beta',
+      'tts-sdk/azure-openai/0.1.0',
     );
   };
 
